@@ -67,10 +67,7 @@ public class CDVBMSAnalytics extends CordovaPlugin {
         } else if("setUserIdentity".equals(action)){
             this.setUserIdentity(args, callbackContext);
             return true;
-        } else if("logLocation".equals(action)){
-            Analytics.logLocation();
         }
-
         return false;
     }
 
@@ -137,8 +134,7 @@ public class CDVBMSAnalytics extends CordovaPlugin {
             String applicationName = args.getString(0);
             String clientApiKey = args.getString(1);
             boolean hasContext = args.getBoolean(2);
-            boolean collectLocation =args.getBoolean(3);
-            JSONArray deviceEventsArray = args.getJSONArray(4);
+            JSONArray deviceEventsArray = args.getJSONArray(3);
             Analytics.DeviceEvent[] devices = new Analytics.DeviceEvent[deviceEventsArray.length()];
             for(int i = 0; i < deviceEventsArray.length(); i++ ){
                 if(deviceEventsArray.getInt(i) == 0){
@@ -151,7 +147,7 @@ public class CDVBMSAnalytics extends CordovaPlugin {
                     devices[i] = Analytics.DeviceEvent.NETWORK;
                 }
             }
-            Analytics.init(app, applicationName, clientApiKey, hasContext, collectLocation,devices);
+            Analytics.init(app, applicationName, clientApiKey, hasContext, devices);
         } catch (JSONException e) {
             analyticsLogger.error("init :: Analytics failed to initialize. Please review arguments");
             callbackContext.error(e.getMessage());

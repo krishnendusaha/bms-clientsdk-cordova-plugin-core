@@ -135,8 +135,7 @@ import BMSAnalytics
             let appName = command.arguments[0] as! String
             let clientApiKey = command.arguments[1] as! String
             let hasUserContext = command.arguments[2] as! Bool
-            let collectLocation = command.arguments[3] as! Bool
-            let events = command.arguments[4] as! [Int]
+            let events = command.arguments[3] as! [Int]
             var deviceEvents = [DeviceEvent]()
             var lifecycleFlag: Bool = false
             var networkFlag:Bool = false
@@ -170,13 +169,13 @@ import BMSAnalytics
             #if swift(>=3.0)
                 self.commandDelegate!.run(inBackground: {
                     if(noneFlag){
-                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext,collectLocation: collectLocation)
+                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext)
                     } else if (lifecycleFlag && networkFlag){
-                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext,collectLocation: collectLocation, deviceEvents: .lifecycle, .network)
+                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext, deviceEvents: .lifecycle, .network)
                     } else if(networkFlag) {
-                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext,collectLocation: collectLocation, deviceEvents: .network)
+                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext, deviceEvents: .network)
                     } else if(lifecycleFlag){
-                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext, collectLocation: collectLocation, deviceEvents: .lifecycle)
+                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext, deviceEvents: .lifecycle)
                     }
 
                     let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs:true)
@@ -185,13 +184,13 @@ import BMSAnalytics
             #else
                 self.commandDelegate!.runInBackground({
                     if(noneFlag){
-                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext,collectLocation: collectLocation)
+                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext)
                     } else if (lifecycleFlag && networkFlag){
-                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext, collectLocation: collectLocation, deviceEvents: .lifecycle, .network)
+                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext, deviceEvents: .lifecycle, .network)
                     } else if(lifecycleFlag){
-                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext, collectLocation: collectLocation, deviceEvents: .lifecycle)
+                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext, deviceEvents: .lifecycle)
                     }  else if(networkFlag) {
-                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext, collectLocation: collectLocation, deviceEvents: .network)
+                        Analytics.initialize(appName: appName, apiKey: clientApiKey, hasUserContext: hasUserContext, deviceEvents: .network)
                     }
 
                     let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAsBool:true)
@@ -219,23 +218,5 @@ import BMSAnalytics
             })
         #endif
 
-    }
-    
-    func logLocation(_ command: CDVInvokedUrlCommand) {
-        
-        #if swift(>=3.0)
-            self.commandDelegate!.run(inBackground: {
-                Analytics.logLocation()
-                let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs:true)
-                self.commandDelegate!.send(pluginResult, callbackId:command.callbackId)
-            })
-        #else
-            self.commandDelegate!.runInBackground({
-            Analytics.logLocation()!)
-            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAsBool:true)
-            self.commandDelegate!.sendPluginResult(pluginResult, callbackId:command.callbackId)
-            })
-        #endif
-        
     }
 }
